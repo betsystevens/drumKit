@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>My JS Drum Kit</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+	<div class="keys" tabindex="1">
+	
+		<div data-key="65" class="key">
+			<kbd>A</kbd>
+			<span class="sound">clap</span>
+		</div>
+		<div data-key="83" class="key">
+			<kbd>S</kbd>
+			<span class="sound">hihat</span>
+		</div>
+		<div data-key="68" class="key">
+			<kbd>D</kbd>
+			<span class="sound">kick</span>
+		</div>
+		<div data-key="70" class="key">
+			<kbd>F</kbd>
+			<span class="sound">openhat</span>
+		</div>
+		<div data-key="71" class="key">
+			<kbd>G</kbd>
+			<span class="sound">boom</span>
+		</div>
+		<div data-key="72" class="key">
+			<kbd>H</kbd>
+			<span class="sound">ride</span>
+		</div>
+		<div data-key="74" class="key">
+			<kbd>J</kbd>
+			<span class="sound">snare</span>
+		</div>
+		<div data-key="75" class="key">
+			<kbd>K</kbd>
+			<span class="sound">tom</span>
+		</div>
+		<div data-key="76" class="key">
+			<kbd>L</kbd>
+			<span class="sound">tink</span>
+		</div>
+	</div>
+
+	<audio src="sounds/clap.wav" data-key="65"></audio>
+	<audio src="sounds/hihat.wav" data-key="83"></audio>
+	<audio src="sounds/kick.wav" data-key="68"></audio>
+	<audio src="sounds/openhat.wav" data-key="70"></audio>
+	<audio src="sounds/boom.wav" data-key="71"></audio>
+	<audio src="sounds/ride.wav" data-key="72"></audio>
+	<audio src="sounds/snare.wav" data-key="74"></audio>
+	<audio src="sounds/tom.wav" data-key="75"></audio>
+	<audio src="sounds/tink.wav" data-key="76"></audio>
+
+	<script>
+		function playDrum(e) {
+			const audioList = document.getElementsByTagName('audio'); // audio elements
+  		const audioElmnts = [...audioList];  // convert node list to array
+  		const audioElmnt = audioElmnts.find(k => {
+  			return k.getAttribute('data-key') == e.keyCode;  // compare audio's key with user's
+  		});
+
+  		if (audioElmnt) {
+  			// audioElmnt.currentTime = 0; // rewind to make multiple keydowns work
+  			audioElmnt.load(); // or force re-load in order to play mulitple keydowns
+  			audioElmnt.play();
+  			// get nodeList then convert to array in one step
+  			const keyDivs = [...document.getElementsByClassName('key')];
+
+  			const theKey = keyDivs.find(k => { 
+  				return k.getAttribute('data-key') == e.keyCode;
+  			});
+				theKey.className += ' playing';
+  		};
+  	};
+  	function removeTransition(e) {
+  		if (e.propertyName === 'transform') this.classList.remove('playing');
+  	}
+ 
+  	const keys = document.querySelectorAll('.key');
+		keys.forEach( key => key.addEventListener('transitionend', removeTransition));
+		
+		window.addEventListener('keydown', playDrum);
+	</script>
+</body>
+
+</html>
